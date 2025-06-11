@@ -28,11 +28,11 @@ void arena_free(struct Arena *arena)
 
 void *arena_alloc(struct Arena *arena, uint64_t n_bytes)
 {
-    const uint64_t alignment = _Alignof(max_align_t);
-    const uintptr_t remainder = (uintptr_t)arena->ptr % alignment;
-    const uintptr_t padding = (alignment - remainder) % alignment;
-    const uint64_t offset = arena->ptr - arena->start;
-    const uint64_t required_size = offset + n_bytes + padding;
+    uint64_t alignment = _Alignof(max_align_t);
+    uintptr_t remainder = (uintptr_t)arena->ptr % alignment;
+    uintptr_t padding = (alignment - remainder) % alignment;
+    uint64_t offset = arena->ptr - arena->start;
+    uint64_t required_size = offset + n_bytes + padding;
     if (required_size > arena->size)
     {
         do
@@ -42,7 +42,7 @@ void *arena_alloc(struct Arena *arena, uint64_t n_bytes)
         void *buf = realloc(arena->start, arena->size);
         if (buf == NULL)
         {
-            fprintf(stderr, "Failure to allocate arena memory.\n");
+            fprintf(stderr, "Failure to reallocate arena buffer\n");
             exit(1);
         }
         arena->start = buf;
